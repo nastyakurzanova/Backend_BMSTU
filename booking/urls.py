@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import *
-
+# 2 lab
 urlpatterns = [
     # Набор методов для услуг
     path('api/audiences/', search_audiences),  # GET
