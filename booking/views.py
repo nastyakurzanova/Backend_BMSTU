@@ -7,17 +7,41 @@ from .serializers import *
 from .models import *
 
 
+# @api_view(["GET"])
+# def search_audiences(request):
+   
+#     query = request.GET.get("query", "")
+
+#     audiencess = Audiences.objects.filter(status=1).filter(number__icontains=query)
+
+#     serializer = AudiencesSerializer(audiencess, many=True)
+
+#     return Response(serializer.data)
+
+def get_draft_audiences():
+
+    # audiences = Audiences.objects.filter(status=1).first()
+    audiences = Audiences.objects.filter(status=1).first()
+    if audiences is None:
+        return None
+
+    return audiences
+
 @api_view(["GET"])
 def search_audiences(request):
-   
-    query = request.GET.get("query", "")
-
-    audiencess = Audiences.objects.filter(status=1).filter(number__icontains=query)
-
-    serializer = AudiencesSerializer(audiencess, many=True)
-
-    return Response(serializer.data)
-
+    name = request.GET.get('query', '')
+    
+    audiences = Audiences.objects.filter(status=1).filter(name__contains=name)
+    
+    serializer = AudiencesSerializer(audiences, many=True)
+    draft_audiences = get_draft_audiences()
+    # draft_audiences.pk
+    data = {
+        "info": serializer.data,
+        "draft_audiences": draft_audiences.pk if draft_audiences else None
+    }
+    print(data)
+    return Response(data)
 
 @api_view(["GET"])
 def get_audiences_by_id(request, audiences_id):
@@ -46,14 +70,12 @@ def update_audiences(request, audiences_id):
 
 @api_view(["POST"])
 def create_audiences(request):
-    Audiences.objects.create()
-
-    audiencess = Audiences.objects.all()
-    serializer = AudiencesSerializer(audiencess, many=True)
-    print(audiencess)
-    print('--------------------------------------')
-    print(serializer.data)
-    return Response(serializer.data)
+    serializer = AudiencesSerializer(data=request.data)
+    serializer.initial_data["image"] = request.FILES['image']
+    if(serializer.is_valid()):
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["DELETE"])
@@ -75,7 +97,6 @@ def delete_audiences(request, audiences_id):
 def add_audiences_to_booking(request, audiences_id):
     if not Audiences.objects.filter(pk=audiences_id).exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
-    print(12321)
     audiences = Audiences.objects.get(pk=audiences_id)
     print(audiences)
     booking = Booking.objects.filter(status=1).last()
@@ -97,9 +118,9 @@ def get_audiences_image(request, audiences_id):
     if not Audiences.objects.filter(pk=audiences_id).exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    pioneer = Audiences.objects.get(pk=audiences_id)
+    audiences = Audiences.objects.get(pk=audiences_id)
 
-    return HttpResponse(pioneer.image, content_type="image/png")
+    return HttpResponse(audiences.image, content_type="image/png")
 
 
 @api_view(["PUT"])
@@ -115,6 +136,17 @@ def update_audiences_image(request, audiences_id):
 
     return Response(serializer.data)
 
+# @api_view(["GET"])
+# def search_cosmetics(request):
+#     cosmetics = Cosmetic.objects.all()
+
+#     request_status = request.GET.get("status")
+#     if request_status:
+#         cosmetics = cosmetics.filter(status=request_status)
+
+#     serializer = CosmeticSerializer(cosmetics, many=True)
+
+#     return Response(serializer.data)
 
 @api_view(["GET"])
 def get_booking(request):

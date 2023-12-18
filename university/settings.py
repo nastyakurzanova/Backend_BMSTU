@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-)^*&5*%&h%qq_f^c3*v(+0alq@)-0=v!%@cx&k^1p2v%a0+m=f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -121,8 +121,10 @@ MEDIA_URL = '/media/'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_STORAGE_BUCKET_NAME = 'images'
-AWS_ACCESS_KEY_ID = 'kR97gOtNkTXbSaIonbpA'
-AWS_SECRET_ACCESS_KEY = 'aZ23YMkLGMrV8NevAMj5rwuMboRDdOH7qkfqTE4x'
+# AWS_ACCESS_KEY_ID = 'kR97gOtNkTXbSaIonbpA'
+# AWS_SECRET_ACCESS_KEY = 'aZ23YMkLGMrV8NevAMj5rwuMboRDdOH7qkfqTE4x'
+AWS_ACCESS_KEY_ID = 'admin'
+AWS_SECRET_ACCESS_KEY = 'password'
 AWS_S3_ENDPOINT_URL = 'http://127.0.0.1:9000'
 # http://169.254.67.254:9000
 # minioadmin minioadmin

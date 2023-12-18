@@ -41,10 +41,11 @@ class Audiences(models.Model):
         (1, 'Действует'),
         (2, 'Удалена'),
     )
+    name = models.CharField(max_length=1000, default="501", verbose_name="Номер")
     number = models.CharField(max_length=1000, verbose_name="Номер")
     price = models.FloatField(default=5000.00, verbose_name="Цена")
-    info = models.TextField(max_length=250, verbose_name="Информация")
-    image = models.ImageField(upload_to="audiencess", default="audiences/default.jpg", verbose_name="Фото")
+    info = models.TextField(max_length=250, verbose_name="Информация", null=True)
+    image = models.ImageField(verbose_name="Фото", null=False)
     corpus = models.TextField(max_length=20, verbose_name="Корпус")
     status = models.IntegerField(max_length=100, choices=STATUS_CHOICES, default=1, verbose_name="Статус")
 
@@ -99,14 +100,14 @@ class Booking(models.Model):
         (4, 'Отменён'),
         (5, 'Удалён'),
     )
-
+   
     audincess = models.ManyToManyField(Audiences, through='BookingAudiences')
     status = models.IntegerField(max_length=100, choices=STATUS_CHOICES, default=1, verbose_name="Статус")
-    date = models.DateField(default=datetime.now(tz=timezone.utc), verbose_name="Дата добавления")
+    date = models.DateField(auto_now_add=True, verbose_name="Дата добавления")
     moderator = models.IntegerField(max_length=100,  default=1, verbose_name="Модератор")
-    date_created = models.DateTimeField(default=datetime.now(tz=timezone.utc), verbose_name="Дата создания")
-    date_of_formation = models.DateTimeField(default=datetime.now(tz=timezone.utc), verbose_name="Дата формирования")
-    date_complete = models.DateTimeField(default=datetime.now(tz=timezone.utc), verbose_name="Дата завершения")
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    date_of_formation = models.DateTimeField(auto_now_add=True, verbose_name="Дата формирования")
+    date_complete = models.DateTimeField(auto_now_add=True, verbose_name="Дата завершения")
 
     def __str__(self):
         return "Заявка №" + str(self.pk)
@@ -114,6 +115,7 @@ class Booking(models.Model):
     class Meta:
         verbose_name = "Заявка"
         verbose_name_plural = "Заявки"
+        managed=True
 
 class BookingAudiences(models.Model):
     audience = models.ForeignKey(Audiences, models.DO_NOTHING)

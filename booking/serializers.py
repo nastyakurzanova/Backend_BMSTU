@@ -4,6 +4,7 @@ from .models import *
 
 
 class AudiencesSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField()
     class Meta:
         model = Audiences
         fields = "__all__"

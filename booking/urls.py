@@ -1,9 +1,19 @@
 from django.urls import path
 from .views import *
 
+
+
+# git@github.com:nastyakurzanova/Backend_BMSTU.git
+# https://github.com/nastyakurzanova/Backend_BMSTU.git
+
+# git@github.com:nastyakurzanova/Frontend_BMSTU.git
+# https://github.com/nastyakurzanova/Frontend_BMSTU.git
+
+
 urlpatterns = [
-    # Набор методов для услуг
-    path('api/audiences/', search_audiences),  # GET
+    # Набор методов для услуг search_audiences
+    path('api/audiences/search/<int:audiences_id>/', get_audiences_by_id),  # GET
+    path('api/audiences/search/', search_audiences),  # GET !!
     path('api/audiences/<int:audiences_id>/', get_audiences_by_id),  # GET
     path('api/audiences/<int:audiences_id>/update/', update_audiences),  # PUT
     path('api/audiences/<int:audiences_id>/delete/', delete_audiences),  # DELETE
@@ -13,7 +23,8 @@ urlpatterns = [
     path('api/audiences/<int:audiences_id>/update_image/', update_audiences_image),  # PUT
 
     # Набор методов для заявок
-    path('api/booking/', get_booking),  # GET
+
+    path('api/booking/search/', get_booking),  # GET
     path('api/booking/<int:booking_id>/', get_booking_by_id),  # GET
     path('api/booking/<int:booking_id>/update/', update_booking),  # PUT
     path('api/booking/<int:booking_id>/update_status_user/', update_status_user),  # PUT
